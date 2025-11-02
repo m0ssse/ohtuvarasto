@@ -53,6 +53,7 @@ def main():
     print(f"saatiin {saatiin}")
     print(f"Mehuvarasto: {mehua}")
     print("merge conflict!")
+    print("resolved!")
 
 
 if __name__ == "__main__":
