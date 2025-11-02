@@ -65,4 +65,4 @@ class TestVarasto(unittest.TestCase):
 
     def test_merkkijonoesitys(self):
         self.varasto.lisaa_varastoon(3)
-        self.assertEqual(str(self.varasto), f"saldo = 3, vielä tilaa 7")
+        self.assertEqual(str(self.varasto), f"saldo = 3, vielä on tilaa 7")
