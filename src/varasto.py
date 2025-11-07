@@ -27,7 +27,7 @@ class Varasto:
 
         return maara
 
-    def rikotaan_snakeCase(self):
+    def rikotaan_SnakeCase(self):
         return
 
     def __str__(self):
