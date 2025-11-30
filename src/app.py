@@ -10,6 +10,11 @@ app = Flask(__name__)
 warehouses = {}
 
 
+def clear_warehouses():
+    """Clear all warehouses. Used for testing."""
+    warehouses.clear()
+
+
 def _parse_floats(capacity_str, balance_str):
     """Parse capacity and balance strings to floats."""
     return float(capacity_str), float(balance_str)
@@ -62,9 +67,8 @@ def view_warehouse(name):
 
 
 def _update_warehouse_capacity(warehouse, new_capacity):
-    """Update warehouse capacity and adjust balance if needed."""
-    warehouse.tilavuus = max(new_capacity, 0)
-    warehouse.saldo = min(warehouse.saldo, warehouse.tilavuus)
+    """Update warehouse capacity using the Varasto class method."""
+    warehouse.aseta_tilavuus(new_capacity)
 
 
 @app.route("/warehouse/<name>/modify", methods=["GET", "POST"])
@@ -137,4 +141,4 @@ def take_items(name):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()

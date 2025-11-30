@@ -1,6 +1,6 @@
 """Tests for the Flask web application."""
 import unittest
-from app import app, warehouses
+from app import app, warehouses, clear_warehouses
 
 
 class TestApp(unittest.TestCase):
@@ -10,7 +10,7 @@ class TestApp(unittest.TestCase):
         """Set up test client and reset warehouses."""
         self.app = app.test_client()
         app.config["TESTING"] = True
-        warehouses.clear()
+        clear_warehouses()
 
     def test_index_page_loads(self):
         """Test that the index page loads successfully."""

@@ -30,5 +30,10 @@ class Varasto:
     def rikotaan_snake_case(self):
         return
 
+    def aseta_tilavuus(self, uusi_tilavuus):
+        """Set new capacity. Adjusts balance if it exceeds new capacity."""
+        self.tilavuus = max(uusi_tilavuus, 0.0)
+        self.saldo = min(self.saldo, self.tilavuus)
+
     def __str__(self):
         return f"saldo = {self.saldo}, vielä on tilaa {self.paljonko_mahtuu()}"
