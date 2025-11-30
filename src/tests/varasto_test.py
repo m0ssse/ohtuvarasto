@@ -66,3 +66,18 @@ class TestVarasto(unittest.TestCase):
     def test_merkkijonoesitys(self):
         self.varasto.lisaa_varastoon(3)
         self.assertEqual(str(self.varasto), f"saldo = 3, vielä on tilaa 7")
+
+    def test_aseta_tilavuus_kasvattaa_tilavuutta(self):
+        self.varasto.aseta_tilavuus(20)
+        self.assertAlmostEqual(self.varasto.tilavuus, 20)
+        self.assertAlmostEqual(self.varasto.saldo, 0)
+
+    def test_aseta_tilavuus_vahentaa_saldoa_tarvittaessa(self):
+        self.varasto.lisaa_varastoon(8)
+        self.varasto.aseta_tilavuus(5)
+        self.assertAlmostEqual(self.varasto.tilavuus, 5)
+        self.assertAlmostEqual(self.varasto.saldo, 5)
+
+    def test_aseta_tilavuus_ei_voi_olla_negatiivinen(self):
+        self.varasto.aseta_tilavuus(-10)
+        self.assertAlmostEqual(self.varasto.tilavuus, 0)
