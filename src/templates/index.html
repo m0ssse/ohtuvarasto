@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Warehouse Management - Home{% endblock %}
+{% block content %}
+<h1>Warehouse Management</h1>
+
+{% if warehouses %}
+    <h2>All Warehouses</h2>
+    {% for name, warehouse in warehouses.items() %}
+    <div class="warehouse-card">
+        <h3>{{ name }}</h3>
+        <p><strong>Balance:</strong> {{ warehouse.saldo }}</p>
+        <p><strong>Capacity:</strong> {{ warehouse.tilavuus }}</p>
+        <p><strong>Available Space:</strong> {{ warehouse.paljonko_mahtuu() }}</p>
+        <div class="actions">
+            <a href="{{ url_for('view_warehouse', name=name) }}">View Details</a>
+            <a href="{{ url_for('modify_warehouse', name=name) }}">Modify</a>
+            <a href="{{ url_for('add_items', name=name) }}">Add Items</a>
+            <a href="{{ url_for('take_items', name=name) }}">Take Items</a>
+        </div>
+    </div>
+    {% endfor %}
+{% else %}
+    <p>No warehouses have been created yet.</p>
+    <p><a href="{{ url_for('create_warehouse') }}">Create your first warehouse</a></p>
+{% endif %}
+{% endblock %}

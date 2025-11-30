@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Modify {{ name }}{% endblock %}
+{% block content %}
+<h1>Modify {{ name }}</h1>
+
+{% if error %}
+<div class="error">{{ error }}</div>
+{% endif %}
+
+<div class="warehouse-card">
+    <p><strong>Current Balance:</strong> {{ warehouse.saldo }}</p>
+    <p><strong>Current Capacity:</strong> {{ warehouse.tilavuus }}</p>
+    <p><strong>Available Space:</strong> {{ warehouse.paljonko_mahtuu() }}</p>
+</div>
+
+<form method="POST">
+    <div class="form-group">
+        <label for="capacity">New Capacity:</label>
+        <input type="number" id="capacity" name="capacity" step="0.01" min="0" value="{{ warehouse.tilavuus }}">
+    </div>
+    <button type="submit">Update Capacity</button>
+</form>
+
+<p><a href="{{ url_for('view_warehouse', name=name) }}">Back to warehouse</a></p>
+{% endblock %}
