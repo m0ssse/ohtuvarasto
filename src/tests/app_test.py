@@ -245,3 +245,86 @@ class TestApp(unittest.TestCase):
         response = self.app.get("/")
         self.assertIn(b"First", response.data)
         self.assertIn(b"Second", response.data)
+
+    def test_search_page_loads(self):
+        """Test that the search page loads successfully."""
+        response = self.app.get("/search")
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b"Search Results", response.data)
+
+    def test_search_with_empty_query(self):
+        """Test search with empty query shows appropriate message."""
+        response = self.app.get("/search?q=")
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b"Please enter a search term", response.data)
+
+    def test_search_finds_matching_warehouses(self):
+        """Test that search finds warehouses containing the search string."""
+        self.app.post("/create", data={
+            "name": "Main Warehouse",
+            "capacity": "100",
+            "initial_balance": "50"
+        })
+        self.app.post("/create", data={
+            "name": "Secondary Storage",
+            "capacity": "200",
+            "initial_balance": "30"
+        })
+        response = self.app.get("/search?q=Warehouse")
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b"Main Warehouse", response.data)
+        self.assertNotIn(b"Secondary Storage", response.data)
+
+    def test_search_is_case_insensitive(self):
+        """Test that search is case insensitive."""
+        self.app.post("/create", data={
+            "name": "Big Warehouse",
+            "capacity": "100",
+            "initial_balance": "0"
+        })
+        response = self.app.get("/search?q=warehouse")
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b"Big Warehouse", response.data)
+
+    def test_search_no_results(self):
+        """Test search with no matching results."""
+        self.app.post("/create", data={
+            "name": "Test Storage",
+            "capacity": "100",
+            "initial_balance": "0"
+        })
+        response = self.app.get("/search?q=nonexistent")
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b"No warehouses found", response.data)
+
+    def test_search_results_show_warehouse_details(self):
+        """Test that search results display warehouse details like front page."""
+        self.app.post("/create", data={
+            "name": "Detail Warehouse",
+            "capacity": "100",
+            "initial_balance": "25"
+        })
+        response = self.app.get("/search?q=Detail")
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b"Detail Warehouse", response.data)
+        self.assertIn(b"Balance", response.data)
+        self.assertIn(b"Capacity", response.data)
+        self.assertIn(b"Available Space", response.data)
+        self.assertIn(b"View Details", response.data)
+
+    def test_search_partial_match(self):
+        """Test that search finds partial matches."""
+        self.app.post("/create", data={
+            "name": "Warehouse Alpha",
+            "capacity": "100",
+            "initial_balance": "0"
+        })
+        self.app.post("/create", data={
+            "name": "Warehouse Beta",
+            "capacity": "100",
+            "initial_balance": "0"
+        })
+        response = self.app.get("/search?q=house")
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b"Warehouse Alpha", response.data)
+        self.assertIn(b"Warehouse Beta", response.data)

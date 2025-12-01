@@ -140,5 +140,17 @@ def take_items(name):
     return render_template("take.html", name=name, warehouse=warehouse)
 
 
+@app.route("/search")
+def search_warehouses():
+    """Search for warehouses by name."""
+    query = request.args.get("q", "").strip()
+    results = {}
+    if query:
+        for name, warehouse in warehouses.items():
+            if query.lower() in name.lower():
+                results[name] = warehouse
+    return render_template("search_results.html", query=query, results=results)
+
+
 if __name__ == "__main__":
     app.run()
