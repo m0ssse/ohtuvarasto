@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Search Results{% endblock %}
+{% block content %}
+<h1>Search Results</h1>
+
+{% if query %}
+    <p>Results for: <strong>{{ query }}</strong></p>
+    
+    {% if results %}
+        {% for name, warehouse in results.items() %}
+        <div class="warehouse-card">
+            <h3>{{ name }}</h3>
+            <p><strong>Balance:</strong> {{ warehouse.saldo }}</p>
+            <p><strong>Capacity:</strong> {{ warehouse.tilavuus }}</p>
+            <p><strong>Available Space:</strong> {{ warehouse.paljonko_mahtuu() }}</p>
+            <div class="actions">
+                <a href="{{ url_for('view_warehouse', name=name) }}">View Details</a>
+                <a href="{{ url_for('modify_warehouse', name=name) }}">Modify</a>
+                <a href="{{ url_for('add_items', name=name) }}">Add Items</a>
+                <a href="{{ url_for('take_items', name=name) }}">Take Items</a>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p>No warehouses found matching your search.</p>
+    {% endif %}
+{% else %}
+    <p>Please enter a search term.</p>
+{% endif %}
+{% endblock %}

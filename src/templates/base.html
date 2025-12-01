@@ -93,7 +93,11 @@
 <body>
     <nav>
         <a href="{{ url_for('index') }}">Home</a> |
-        <a href="{{ url_for('create_warehouse') }}">Create New Warehouse</a>
+        <a href="{{ url_for('create_warehouse') }}">Create New Warehouse</a> |
+        <form action="{{ url_for('search_warehouses') }}" method="get" style="display: inline;">
+            <input type="text" name="q" placeholder="Search warehouses..." style="padding: 4px;">
+            <button type="submit" style="padding: 4px 8px;">Search</button>
+        </form>
     </nav>
     <div class="container">
         {% block content %}{% endblock %}
